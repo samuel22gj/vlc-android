@@ -94,9 +94,13 @@ public class LibVlcUtil {
 
         ElfData elf = readLib(context.getApplicationInfo().dataDir + "/lib/libvlcjni.so");
         if(elf == null) {
-            Log.e(TAG, "WARNING: Unable to read libvlcjni.so; cannot check device ABI!");
-            Log.e(TAG, "WARNING: Cannot guarantee correct ABI for this build (may crash)!");
-            return true;
+            // Support system application to using VLC Library
+            elf = readLib("system/lib/libvlcjni.so");
+            if(elf == null) {
+                Log.e(TAG, "WARNING: Unable to read libvlcjni.so; cannot check device ABI!");
+                Log.e(TAG, "WARNING: Cannot guarantee correct ABI for this build (may crash)!");
+                return true;
+            }
         }
 
         String CPU_ABI = android.os.Build.CPU_ABI;
